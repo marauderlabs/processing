@@ -1,11 +1,11 @@
 from node import Node
 from random import randint
 
-points = 20
-radius = 20
+points = 20 # no. of vertices to start with
+radius = 20 # of each vertex
 nodes = []
 visited = []
-found = False
+found = False # found the MST?
 
 def setup():
     size(500, 500)
@@ -21,25 +21,30 @@ def draw():
     stroke(255)
     
     if not found:
-        dijkstras()
-        p = None
+        prims() #find it and draw
+        prev = None
         for n in visited:
             ellipse(n.x, n.y, radius, radius)
-            if p:
+            if prev:
                 line(n.x, n.y, p.x, p.y)
-            p = n
+            prev = n
                                    
         
 def mouseClicked():
     nodes.append(Node(mouseX, mouseY))
     
 
-def dijkstras():
-    found = True
-    unvisited = nodes[:]
+def prims():
+    global found
     global visited
+
+    unvisited = nodes[:]
     visited = [unvisited.pop()]
     
+    # v is visited. vi is visited index.
+    # u is unvisited. ui is unvisited index.
+    # between every visited and unvisited, find the minimum.
+
     while unvisited:
         shortest = float('inf')
         for vi, v in enumerate(visited):
@@ -52,3 +57,5 @@ def dijkstras():
         visited.append(unvisited.pop(nextui))
         
         
+    found = True
+    return
